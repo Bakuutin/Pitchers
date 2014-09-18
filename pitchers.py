@@ -5,7 +5,7 @@
 from enum import Enum
 
 
-class Kind(Enum):
+class Action(Enum):
     """
     Действия с кувшинами
     """
@@ -17,7 +17,7 @@ class Kind(Enum):
 
 def get_pitchers_volume():
     """
-    Функция возвращает список из целочисленных значений объёмов кувшинов
+    Возвращает список из целочисленных значений объёмов кувшинов
     """
     while True:  # pitchers_volume это list из целых чисел, полученных разбиением вводимой строки
         pitchers_volume = list(int(pitcher) for pitcher in input("Введите через пробел объёмы двух кувшинов: ").split())
@@ -30,14 +30,14 @@ def get_pitchers_volume():
 
 def get_target():
     """
-    Функция возвращает целочисленный желаемый объём
+    Возвращает целочисленный желаемый объём
     """
     return int(input("Введите желаемый объём: "))
 
 
 def greatest_common_divisor(a, b):
     """
-    Функция считает наибольший общий делитель.
+    Считает наибольший общий делитель.
     """
     while b:
         a, b = b, a % b
@@ -46,41 +46,41 @@ def greatest_common_divisor(a, b):
 
 def make_edges(i, j, i_max, j_max):
     """
-    Функция создаёт список из всех исходящих ветвей графа в точке (i, j)
+    Создаёт список из всех исходящих ветвей графа в точке (i, j)
     Где i и j — наполненность первого и второго кувшинов
     """
     edges = dict()
 
     # Если кувшины не пусты, их можно опустошить
     if i != 0:
-        edges[(0, j)] = Kind.empty
+        edges[(0, j)] = Action.empty
     if j != 0:
-        edges[(i, 0)] = Kind.empty
+        edges[(i, 0)] = Action.empty
 
     # Если кувшины не полные, их можно наполнить
     if i != i_max:
-        edges[(i_max, j)] = Kind.fill
+        edges[(i_max, j)] = Action.fill
     if j != j_max:
-        edges[(i, j_max)] = Kind.fill
+        edges[(i, j_max)] = Action.fill
 
     # Из непустого кувшина можно перелить в неполный
     if i != 0 and j_max-j >= i:
-        edges[(0, j+i)] = Kind.transfer
+        edges[(0, j+i)] = Action.transfer
     if j != 0 and i_max-i >= j:
-        edges[(i+j, 0)] = Kind.transfer
+        edges[(i+j, 0)] = Action.transfer
 
     # Причем, если в неполном не хватит места,
     # то оба кувшина останутся непустыми
     if j != 0 and 0 < i_max-i < j:
-        edges[(i_max, j - (i_max-i))] = Kind.transfer
+        edges[(i_max, j - (i_max-i))] = Action.transfer
     if i != 0 and 0 < j_max-j < i:
-        edges[(i - (j_max-j), j_max)] = Kind.transfer
+        edges[(i - (j_max-j), j_max)] = Action.transfer
     return edges
 
 
 def make_pitchers_graph(pitchers_volume):
     """
-    Функция создаёт словарь, в котором ключи — все комбинации наполненности кувшинов,
+    Создаёт словарь, в котором ключи — все комбинации наполненности кувшинов,
     а значения — возможные переходы из каждой комбинации
     """
     pitchers_graph = dict()
@@ -97,7 +97,7 @@ def dijkstra(graph, start_node, target):
     """
     distance = dict.fromkeys(graph, float('inf'))
     path = dict()
-    path[start_node] = [[[start_node], [Kind.start]]]  # Путь записывается в виде словаря, в котором к каждому из
+    path[start_node] = [[[start_node], [Action.start]]]  # Путь записывается в виде словаря, в котором к каждому из
     distance[start_node] = 0                           # имён узлов сосоставляется list из предыдущих узлов
     node_set = set(graph)                              # с добавлением типа действия с кувшинами
     targets_list = [node for node in node_set                   # Цели хранятся как list из всех узлов, которые
