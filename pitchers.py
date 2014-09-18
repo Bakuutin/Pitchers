@@ -122,12 +122,12 @@ def show_answer(path, target):
     Выводит ответ в человекочитаемом виде
     """
     if path is not None:
-        print('Требуется шагов: '+str(len(path)-1))
+        print('Требуется шагов: {}'.format(len(path)-1))
         for node in path:
-            print(node[0][0], end=' ')
-            print(node[1][0].name)
+            print(node[0][0], end=' ')  # Состояние кувшинов
+            print(node[1][0].name)      # Тип действия
     else:
-        print('Нельзя получить '+str(target)+'л., имея только данные кувшины.')
+        print('Нельзя получить {}л., имея только данные кувшины.'.format(target))
 
 
 pitchers_volume = get_pitchers_volume()  # Получаем с клавиатуры объёмы кувшинов
